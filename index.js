@@ -24,8 +24,7 @@ let search
 let siteList = [
   {
     company: "Google Jobs",
-    url: `https://www.google.com/search?rlz=1C5CHFA_enUS860US860&sxsrf=ACYBGNQoashCFDMDYOW6Aije_c9gIgCenQ:1575587263331&ei=v43pXZ-8E6vO0PEP2f-myA8&q=
-    ${search}&ibp=htl;jobs&sa=X&ved=2ahUKEwj2mIqA0J_mAhVNHjQIHZKTDqkQiYsCKAB6BAgKEAM`
+
   },
   {
     company: "Dice",
@@ -38,18 +37,19 @@ async function main() {
   for (let i = 0; i < siteList.length; i++){
     const page = await browser.newPage();
     const site = siteList[i];
-    await page.goto(site.url);
-    switchFunction(site.company, site.url)
+    switchFunction(site.company, site.url, page)
   }
 }
 
-function switchFunction(company) {
+async function switchFunction(company, url, page) {
   switch(company){ 
     case "Google Jobs":
-     for(i = 0; i < searchQuery.length; i++) {
-       search = searchQuery[i].replace(" ", "+");
-      //  scrapeGoogleJobs(searchQuery[i])
-      console.log(search);
+      for(i = 0; i < searchQuery.length; i++) {
+        search = searchQuery[i].replace(" ", "+");
+        url = `https://www.google.com/search?rlz=1C5CHFA_enUS860US860&sxsrf=ACYBGNQoashCFDMDYOW6Aije_c9gIgCenQ:1575587263331&ei=v43pXZ-8E6vO0PEP2f-myA8&q=${search}&ibp=htl;jobs&sa=X&ved=2ahUKEwj2mIqA0J_mAhVNHjQIHZKTDqkQiYsCKAB6BAgKEAM`
+        await page.goto(url);
+        const html = await page.content();
+        scrapeGoogleJobs(html)
      }
     // case "Dice":
     //  scrapeDice(searchQuery)
@@ -57,13 +57,13 @@ function switchFunction(company) {
   
 } 
 
-async function scrapeGoogleJobs(searchQuery) {
+async function scrapeGoogleJobs(html) {
   
 }
 
-// async function scrapeDice
+// async function scrapeDice() {
 
-
+//}
 
 
 //logic for writingfiles 
