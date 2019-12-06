@@ -5,12 +5,11 @@ const cheerio = require("cheerio");
 let jobSample = [
   {
     jobTitle: "Junior React Developer",
-    jobDescription: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad animi unde nisi consequatur dolore quaerat distinctio similique at! Incidunt, omnis! Porro sint delectus vel minus laboriosam asperiores totam vitae ullam minima! Enim, dolore! Deleniti iure beatae, modi, mollitia aperiam, perspiciatis est autem ipsum sunt voluptas architecto corrupti aliquam. Quasi, quidem!",
+    jobDescription: "Lorem ipsum dolor sit",
     company: "Planet Argon",
     applicationUrl: "https://www.planetargon.com",
   }
 ]
-
 
 let searchQuery = [
   "web development",
@@ -19,71 +18,48 @@ let searchQuery = [
   "javascript developer",
 ]
 
-let search
-
 let siteList = [
   {
     company: "Google Jobs",
-
   },
-  {
-    company: "Dice",
-    url: "https://ivet360.com/careers"
-  }
 ]
 
 async function main() {
-  const browser = await puppeteer.launch({ headless: false });
   for (let i = 0; i < siteList.length; i++){
-    const page = await browser.newPage();
-    const site = siteList[i];
-    switchFunction(site.company, site.url, page)
+    switchFunction(siteList[i].company)
   }
 }
 
-async function switchFunction(company, url, page) {
+async function switchFunction(company) {
+  const browser = await puppeteer.launch({ headless: false });
   switch(company){ 
     case "Google Jobs":
-      for(i = 0; i < searchQuery.length; i++) {
-        search = searchQuery[i].replace(" ", "+");
-        url = `https://www.google.com/search?rlz=1C5CHFA_enUS860US860&sxsrf=ACYBGNQoashCFDMDYOW6Aije_c9gIgCenQ:1575587263331&ei=v43pXZ-8E6vO0PEP2f-myA8&q=${search}&ibp=htl;jobs&sa=X&ved=2ahUKEwj2mIqA0J_mAhVNHjQIHZKTDqkQiYsCKAB6BAgKEAM`
-        await page.goto(url);
-        const html = await page.content();
-        scrapeGoogleJobs(html)
-     }
-    // case "Dice":
-    //  scrapeDice(searchQuery)
-  }
-  
+      await googleScrape(browser)
+  }    
 } 
-
-async function scrapeGoogleJobs(html) {
   
-}
-
-// async function scrapeDice() {
-
-//}
-
-
-//logic for writingfiles 
-function writeFiles(companyName, html) {
-  const path = `./${companyName}.txt`
-  
-  try {
-    if (fs.existsSync(path)) {
-      const newPath = `./${companyName}-new.txt`
-      fs.writeFileSync(newPath, html);
-      compareFiles(path, newPath);
-    } else 
-      fs.writeFileSync(path, html);
-  } catch (err) {
-    console.error(err)
+async function scrapeGoogleJobTitles(html) {
+  const $ = cheerio.load(html);
+  const titles = $(".tl-async-corelist [role = heading]");
+  for (i = 0; i < titles.length; i++) {
+    const title = $(titles[i]).text();
+    console.log(title)
   }
 }
 
-function compareFiles(file1, file2) {
-  console.log(file1 === file1)
+async function googleScrape(browser) {
+  searchQuery.map( async (el, i) => {
+    let search = el.replace(" ", "+");
+    let url = `https://www.google.com/search?q=${search}&rlz=1C5CHFA_enUS860US860&oq=softwar&aqs=chrome.0.69i59j0j69i59j69i57j69i60j69i65.2127j1j4&sourceid=chrome&ie=UTF-8&ibp=htl;jobs&sa=X&ved=2ahUKEwjh4pSa5Z_mAhXPIjQIHb6yDMEQiYsCKAB6BAgCEAM#htivrt=jobs&fpstate=tldetail&htichips=date_posted:today&htischips=date_posted;today&htidocid=D8bry7zLg-f08MJsAAAAAA%3D%3D`
+    try {
+      const page = await browser.newPage();
+      await page.goto(url, { waitUntil: "networkidle2" })
+      const html = await page.evaluate(() => document.body.innerHTML, console.log(search, "done"));
+      await scrapeGoogleJobTitles(html)
+    } catch(err) {
+      console.error(err)
+    }
+  })
 }
 
 main();
