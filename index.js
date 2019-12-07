@@ -40,12 +40,24 @@ async function switchFunction(company) {
   
 async function scrapeGoogleJobTitles(html) {
   const $ = cheerio.load(html);
-  const titles = $(".tl-async-corelist [role = heading]").map((i, el) => { 
-    const title = $(el).text();
-    return { title }
+  const titles = $("#gws-horizon-textlists__job_details_page").map((i, el) => { 
+    const title = $(el).find("h2").text();
+    const description = $(el).find("span[style='line-height:1.5em']").text();
+    console.log(title, description)
+    return { title, description }
   }).get();
+  
   return titles;
-   
+}
+
+async function scrapeGoogleJobUrls(jobs, $) {
+  $("* > div > div > div > span > a").map((i, el) => {
+    console.log($(el).attr("href"))
+    for(let i = 0; i < jobs.length; i++) {
+      jobs[i].applyUrl = $(el).attr("href").toString(); 
+    }
+  })
+  return jobs
 }
 
 async function googleScrape(browser) {
@@ -56,8 +68,9 @@ async function googleScrape(browser) {
       const page = await browser.newPage();
       await page.goto(url, { waitUntil: "networkidle2" })
       const html = await page.evaluate(() => document.body.innerHTML, console.log(search, "done"));
-      const titles = await scrapeGoogleJobTitles(html)
-      console.log(titles)
+
+      let jobs = await scrapeGoogleJobTitles(html)
+      console.log(jobs)
     } catch(err) {
       console.error(err)
     }
