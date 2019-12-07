@@ -3,6 +3,7 @@ const fs = require("fs");
 const cheerio = require("cheerio");
 const mongoose = require("mongoose");
 const JobBoard = require("./models/JobBoard");
+const SearchQuery = require("./models/SearchQuery");
 require("dotenv").config();
 
 let jobSample = [
@@ -14,12 +15,7 @@ let jobSample = [
   }
 ]
 
-let searchQuery = [
-  "web development",
-  "junior developer",
-  "react developer",
-  "javascript developer",
-]
+let queries;
 
 let siteList = [
   {
@@ -31,14 +27,30 @@ let siteList = [
 async function connectToMongoDb() {
   mongooseConnection = process.env.MONGO_CONNECTION
   await mongoose.connect(
-     mongooseConnection, 
+    mongooseConnection, 
     { useNewUrlParser: true}
-  );
-  console.log("Connected to DB")
+    );
+    console.log("Connected to DB")
+  }
+  
+
+async function addSearchQuery(query) {
+  const searchQuery = new SearchQuery({
+    query
+  })
+  await searchQuery.save(function(err) {
+    if (err) return handleError(err);
+      console.log("Saved new search query");
+  });
 }
 
-async function main() {
+async function searchModel() {
+    
+}
+  
+  async function main() {
   await connectToMongoDb();
+  queries = await SearchQuery.find()
   for (let i = 0; i < siteList.length; i++){
     switchFunction(siteList[i].company)
   }
@@ -74,13 +86,13 @@ async function createGoogleJobObjects(html) {
   
   }).get();
 
-  
   return titles;
 }
 
 async function googleScrape(browser) {
-  searchQuery.map( async el => {
-    let search = el.replace(" ", "+");
+  console.log(queries)
+  queries.map( async el => {
+    let search = el.query.replace(" ", "+");
     let url = `https://www.google.com/search?q=${search}&rlz=1C5CHFA_enUS860US860&oq=softwar&aqs=chrome.0.69i59j0j69i59j69i57j69i60j69i65.2127j1j4&sourceid=chrome&ie=UTF-8&ibp=htl;jobs&sa=X&ved=2ahUKEwjh4pSa5Z_mAhXPIjQIHb6yDMEQiYsCKAB6BAgCEAM#htivrt=jobs&fpstate=tldetail&htichips=date_posted:today&htischips=date_posted;today&htidocid=D8bry7zLg-f08MJsAAAAAA%3D%3D`;
 
     try {
