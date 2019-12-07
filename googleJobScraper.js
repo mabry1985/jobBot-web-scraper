@@ -1,6 +1,8 @@
 const cheerio = require('cheerio');
 const JobBoard = require("./models/JobBoard");
 
+const downloadTestHtmlfile = false;
+
 async function createGoogleJobObjects(html) {
   const $ = cheerio.load(html);
   const titles = $("#gws-horizon-textlists__job_details_page")
@@ -45,7 +47,10 @@ async function googleScrape(browser, queries) {
       const page = await browser.newPage();
       await page.goto(url, { waitUntil: "networkidle2" });
       const html = await page.evaluate(() => document.body.innerHTML);
-      // fs.writeFileSync("./googleJobBoard.html", html)
+
+      if(downloadTestHtmlfile) {
+        fs.writeFileSync("./googleJobBoard.html", html)
+      };
 
       await createGoogleJobObjects(html);
     } catch (err) {
