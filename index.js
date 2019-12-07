@@ -4,10 +4,10 @@ const cheerio = require("cheerio");
 
 let jobSample = [
   {
-    jobTitle: "Junior React Developer",
-    jobDescription: "Lorem ipsum dolor sit",
-    company: "Planet Argon",
-    applicationUrl: "https://www.planetargon.com",
+    title: "Junior React Developer",
+    description: "Lorem ipsum dolor sit",
+    postedBy: "Planet Argon",
+    applyUrl: "https://www.planetargon.com",
   }
 ]
 
@@ -44,20 +44,11 @@ async function scrapeGoogleJobTitles(html) {
     const title = $(el).find("h2").text();
     const description = $(el).find("span[style='line-height:1.5em']").text();
     const postedBy = $(el).find("> div > div > div > div > div > div").text();
-    return { title, description, postedBy }
+    const applyUrl = $(el).find(" span > a").attr("href").toString();
+    return { title, description, postedBy, applyUrl }
   }).get();
   
   return titles;
-}
-
-async function scrapeGoogleJobUrls(jobs, $) {
-  $("* > div > div > div > span > a").map((i, el) => {
-    console.log($(el).attr("href"))
-    for(let i = 0; i < jobs.length; i++) {
-      jobs[i].applyUrl = $(el).attr("href").toString(); 
-    }
-  })
-  return jobs
 }
 
 async function googleScrape(browser) {
