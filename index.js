@@ -67,9 +67,13 @@ async function createGoogleJobObjects(html) {
       applyUrl
     })
 
-    await jobBoard.save();
-    console.log(jobBoard);
+    await jobBoard.save(function(err) {
+      if (err) return handleError(err);
+      console.log('Saved to JobBoard cluster')
+    });
+  
   }).get();
+
   
   return titles;
 }
