@@ -5,7 +5,7 @@ const downloadTestHtmlfile = false;
 
 async function createGoogleJobObjects(html) {
   const $ = cheerio.load(html);
-  const titles = $("#gws-horizon-textlists__job_details_page")
+  const results = $("#gws-horizon-textlists__job_details_page")
     .map(async (i, el) => {
       const title = $(el)
         .find("h2")
@@ -20,22 +20,25 @@ async function createGoogleJobObjects(html) {
         .find(" span > a")
         .attr("href")
         .toString();
+      await save(title, description, postedBy, applyUrl)
+      });
+  return results;
+}
 
+async function save(title, description, postedBy, applyUrl) {
+  const jobFromDb = await JobBoard.findOne({ description });
+    if (!jobFromDb) {
       const jobBoard = new JobBoard({
         title,
         description,
         postedBy,
         applyUrl
       });
-
-      await jobBoard.save(function(err) {
-        if (err) return handleError(err);
-        console.log("Saved to JobBoard cluster");
-      });
-    })
-    .get();
-
-  return titles;
+      console.log("job saved")
+      return jobBoard.save();
+    }else{
+      console.log("duplicate job found")
+    }
 }
 
 async function googleScrape(browser, queries) {
