@@ -43,8 +43,8 @@ async function scrapeGoogleJobTitles(html) {
   const titles = $("#gws-horizon-textlists__job_details_page").map((i, el) => { 
     const title = $(el).find("h2").text();
     const description = $(el).find("span[style='line-height:1.5em']").text();
-    console.log(title, description)
-    return { title, description }
+    const postedBy = $(el).find("> div > div > div > div > div > div").text();
+    return { title, description, postedBy }
   }).get();
   
   return titles;
