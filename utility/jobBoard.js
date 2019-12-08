@@ -2,7 +2,7 @@ const JobBoard = require("../models/JobBoard");
 
 async function save(title, description, postedBy, applyUrl) {
   const jobFromDb = await JobBoard.findOne({ description });
-  if (!jobFromDb) {
+  if (!jobFromDb && !title.includes("Senior") && !title.includes("Sr") && !title.includes("SR") ) {
     const jobBoard = new JobBoard({
       title,
       description,
