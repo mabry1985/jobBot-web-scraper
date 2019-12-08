@@ -21,7 +21,9 @@ async function createGoogleJobObjects(html) {
         .attr("href")
         .toString();
       await jobBoard.save(title, description, postedBy, applyUrl)
-      });
+      return { title, description, postedBy, applyUrl }
+    }).get();
+
   return results;
 }
 
@@ -35,11 +37,13 @@ async function googleScrape(browser, queries) {
       await page.goto(url, { waitUntil: "networkidle2" });
       const html = await page.evaluate(() => document.body.innerHTML);
 
+      // global switch variable
       if (downloadTestHtmlFile) {
         fs.writeFileSync("./googleJobBoard.html", html);
       }
 
       await createGoogleJobObjects(html);
+
     } catch (err) {
       console.error(err);
     }

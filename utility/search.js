@@ -6,7 +6,6 @@ async function addSearchQuery(query) {
   });
 }
 
-
 module.exports = {
   addSearchQuery
 }

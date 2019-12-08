@@ -1,9 +1,7 @@
 const puppeteer = require("puppeteer");
-const fs = require("fs");
-const cheerio = require("cheerio");
 const mongoose = require("mongoose");
-const JobBoard = require("./models/JobBoard");
 const SearchQuery = require("./models/SearchQuery");
+
 const google = require("./scrapers/googleJobScraper");
 require("dotenv").config();
 
@@ -37,13 +35,13 @@ async function connectToMongoDb() {
 async function main() {
   await connectToMongoDb();
   // await addSearchQuery("web developer")
-  queries = await SearchQuery.find();
+  const queries = await SearchQuery.find();
   await siteLoop(queries);
 }
 
 async function siteLoop(queries) {
   for (let i = 0; i < siteList.length; i++) {
-    switchFunction(siteList[i].company, queries);
+    await switchFunction(siteList[i].company, queries);
   }
 }
 
@@ -51,7 +49,7 @@ async function switchFunction(company, queries) {
   const browser = await puppeteer.launch({ headless: false });
   switch(company){ 
     case "Google Jobs":
-      await google.googleScrape(browser, queries)
+      await google.googleScrape(browser, queries);
   }    
 }   
 
