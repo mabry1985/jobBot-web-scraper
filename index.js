@@ -34,14 +34,6 @@ async function connectToMongoDb() {
   console.log("Connected to DB")
 }
   
-async function addSearchQuery(query) {
-  const searchQuery = new SearchQuery({ query })
-  await searchQuery.save(function(err) {
-    if (err) return handleError(err);
-    console.log("Saved new search query");
-  });
-}
-
 async function main() {
   await connectToMongoDb();
   // await addSearchQuery("web developer")

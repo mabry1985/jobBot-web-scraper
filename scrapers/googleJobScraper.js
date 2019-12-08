@@ -1,5 +1,5 @@
 const cheerio = require('cheerio');
-const JobBoard = require("../models/JobBoard");
+const jobBoard = require('../utility/jobBoard');
 
 const downloadTestHtmlFile = false;
 
@@ -20,25 +20,9 @@ async function createGoogleJobObjects(html) {
         .find(" span > a")
         .attr("href")
         .toString();
-      await save(title, description, postedBy, applyUrl)
+      await jobBoard.save(title, description, postedBy, applyUrl)
       });
   return results;
-}
-
-async function save(title, description, postedBy, applyUrl) {  
-  const jobFromDb = await JobBoard.findOne({ description });
-  if (!jobFromDb) {
-    const jobBoard = new JobBoard({
-      title,
-      description,
-      postedBy,
-      applyUrl
-    });
-    console.log("job saved")
-    return jobBoard.save();
-  }else{
-    console.log("duplicate job found")
-  }
 }
 
 async function googleScrape(browser, queries) {
