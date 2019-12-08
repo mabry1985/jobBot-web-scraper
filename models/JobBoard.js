@@ -6,7 +6,8 @@ const JobBoard = mongoose.model(
     title: String,
     description: String,
     postedBy: String,
-    applyUrl: String
+    applyUrl: String,
+    jobBoardSite: String,
   })
 );
 
