@@ -34,7 +34,6 @@ async function connectToMongoDb() {
   
 async function main() {
   await connectToMongoDb();
-  // await addSearchQuery("web developer")
   const queries = await SearchQuery.find();
   await siteLoop(queries);
 }
