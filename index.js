@@ -1,11 +1,9 @@
 const puppeteer = require("puppeteer");
 const mongoose = require("mongoose");
 const SearchQuery = require("./models/SearchQuery");
-
 const google = require("./scrapers/googleJobScraper");
+const dice = require('./scrapers/diceScraper');
 require("dotenv").config();
-
-let queries;
 
 let jobSample = [
   {
@@ -19,8 +17,12 @@ let jobSample = [
 let siteList = [
   {
     company: "Google Jobs",
-    url: "N/A"
+    url: "job board"
   },
+  {
+    company: "Dice",
+    url: "job board"
+  }
 ]
 
 async function connectToMongoDb() {
@@ -41,6 +43,7 @@ async function main() {
 async function siteLoop(queries) {
   for (let i = 0; i < siteList.length; i++) {
     await switchFunction(siteList[i].company, queries);
+    await sleep(5000);
   }
 }
 
@@ -49,7 +52,15 @@ async function switchFunction(company, queries) {
   switch(company){ 
     case "Google Jobs":
       await google.googleScrape(browser, queries);
-  }    
+      break;
+    case "Dice":
+      await dice.diceScrape(browser, queries);
+      break;
+    }    
 }   
+
+async function sleep(mseconds) {
+  return new Promise(resolve => setTimeout(resolve, mseconds));
+}
 
 main();
