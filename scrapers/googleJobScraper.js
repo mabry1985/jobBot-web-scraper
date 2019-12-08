@@ -14,7 +14,7 @@ async function createGoogleJobObjects(html) {
         .find("span[style='line-height:1.5em']")
         .text();
       const postedBy = $(el)
-        .find("> div > div > div > div > div > div")
+        .find(" > div > div.kFb3Ed > span")
         .text();
       const applyUrl = $(el)
         .find(" span > a")
