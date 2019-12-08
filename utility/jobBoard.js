@@ -14,6 +14,7 @@ async function save(title, description, postedBy, applyUrl) {
   } else {
     console.log("duplicate job found");
   }
+  return jobs
 }
 
 module.exports = {

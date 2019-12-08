@@ -1,6 +1,5 @@
 const cheerio = require('cheerio');
 const jobBoard = require('../utility/jobBoard');
-
 const downloadTestHtmlFile = false;
 
 async function createGoogleJobObjects(html) {
@@ -23,7 +22,6 @@ async function createGoogleJobObjects(html) {
       await jobBoard.save(title, description, postedBy, applyUrl)
       return { title, description, postedBy, applyUrl }
     }).get();
-
   return results;
 }
 
