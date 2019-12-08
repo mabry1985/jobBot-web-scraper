@@ -4,8 +4,10 @@ const cheerio = require("cheerio");
 const mongoose = require("mongoose");
 const JobBoard = require("./models/JobBoard");
 const SearchQuery = require("./models/SearchQuery");
-const google = require("./googleJobScraper");
+const google = require("./scrapers/googleJobScraper");
 require("dotenv").config();
+
+let queries;
 
 let jobSample = [
   {
@@ -15,8 +17,6 @@ let jobSample = [
     applyUrl: "https://www.planetargon.com",
   }
 ]
-
-let queries;
 
 let siteList = [
   {
@@ -30,14 +30,12 @@ async function connectToMongoDb() {
   await mongoose.connect(
     mongooseConnection, 
     { useNewUrlParser: true}
-    );
-    console.log("Connected to DB")
-  }
+  );
+  console.log("Connected to DB")
+}
   
 async function addSearchQuery(query) {
-  const searchQuery = new SearchQuery({
-    query
-  })
+  const searchQuery = new SearchQuery({ query })
   await searchQuery.save(function(err) {
     if (err) return handleError(err);
     console.log("Saved new search query");
