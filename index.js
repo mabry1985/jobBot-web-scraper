@@ -11,10 +11,10 @@ let siteList = [
     company: "Google Jobs",
     url: "job board"
   },
-  // {
-  //   company: "Dice",
-  //   url: "job board"
-  // }
+  {
+    company: "Dice",
+    url: "job board"
+  }
 ]
 
 async function connectToMongoDb() {
@@ -47,7 +47,7 @@ async function switchFunction(company, queries) {
   const browser = await puppeteer.launch({ headless: false });
   switch(company){ 
     case "Google Jobs":
-      await google.googleScrape(browser, queries)
+      // await google.googleScrape(browser, queries)
       break;
     case "Dice":
       await dice.diceScrape(browser, queries);
