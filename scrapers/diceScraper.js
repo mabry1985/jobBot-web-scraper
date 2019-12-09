@@ -42,8 +42,6 @@ async function diceScrape(browser, queries) {
         });
        })
       const jobs = await Promise.all(jobsArray)
-        // .then(jobs => {console.log(jobs)});
-      // console.log(jobs);
       return jobs
     } catch (err) {
       console.error(err);
@@ -51,12 +49,7 @@ async function diceScrape(browser, queries) {
   });
   let results = await Promise.all(resultsArray)
   results = [].concat.apply([], results);
-  console.log(results)
   return results
-}
-
-async function sleep(mseconds) {
-  return new Promise(resolve => setTimeout(resolve, mseconds));
 }
 
 module.exports = {

@@ -48,14 +48,12 @@ async function googleScrape(browser, queries) {
       const html = await page.evaluate(() => document.body.innerHTML);
       const jobs = await createGoogleJobObjects(html)
       return jobs
-      // file.createCsvFile(jobs)
     } catch (err) {
       console.error(err);
     }
   });
   let results = await Promise.all(resultsArray);
   results = [].concat.apply([], results);
-  console.log(results);
   return results;
 }
 

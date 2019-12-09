@@ -13,6 +13,8 @@ async function save(title, description, postedBy, applyUrl,timeStamp, jobBoardSi
     });
     console.log("job saved");
     return jobBoard.save();
+  }else {
+    console.log("duplicate job")
   }
 }
 
