@@ -24,8 +24,9 @@ async function createGoogleJobObjects(html) {
           .attr("href")
           .toString();
         const timeStamp = new Date();
-        jobBoard.save(title, description, postedBy, applyUrl, timeStamp, "Google Jobs")
-        return{ title, description, postedBy, applyUrl }
+        const jobBoardSite = "Google Jobs"
+        jobBoard.save(title, description, postedBy, applyUrl, timeStamp, jobBoardSite)
+        return{ title, description, postedBy, applyUrl, jobBoardSite}
       }).get()
     )
     return Promise.resolve(results)
