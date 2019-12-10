@@ -18,16 +18,12 @@ async function save(title, description, postedBy, applyUrl,timeStamp, jobBoardSi
   }
 }
 
-function jobFilterTitle(job){
-  switch(job){
-    case job.includes("Senior"):
-      return true
-    case job.includes("Sr"):
-      return true
-    case job.includes("SR"):
-      return true
-    default:
-      return false;
+function jobFilterTitle(title){
+  title = title.toLowerCase()
+  if (title.includes("senior") || title.includes("sr")) {
+    return true
+  } else {
+    return false
   }
 }
 
