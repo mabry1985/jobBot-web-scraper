@@ -8,7 +8,8 @@ const JobBoard = mongoose.model(
     postedBy: String,
     applyUrl: String,
     jobBoardSite: String,
-    timeStamp: Date,
+    searchQuery: String,
+    timeStamp: Date
   })
 );
 
