@@ -1,12 +1,11 @@
 const scraper = require("../scrapers/googleJobScraper");
 const fs = require("fs");
 let html;
-let jobs
+let jobs;
 
-beforeAll(async (done) => {
+beforeAll(async () => {
   html = fs.readFileSync("./test-html/googleJobBoard.html");
   jobs = await scraper.createGoogleJobObjects(html);
-  done();
 });
 
 it("should give correct jobs object length", () => {
