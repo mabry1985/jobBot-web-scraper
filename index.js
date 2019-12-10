@@ -23,9 +23,8 @@ async function connectToMongoDb() {
   await mongoose.connect(
     mongooseConnection, 
     { useNewUrlParser: true}
-    );
-    
-  }
+  )
+}
   
   async function main() {
     try {
@@ -35,10 +34,9 @@ async function connectToMongoDb() {
       const resultsArray = await siteLoop(queries, browser)
       let results = await Promise.all(resultsArray);
       results = [].concat.apply([], results);
-      console.log(results);
       file.createCsvFile(results);
   } catch(err) {
-    
+    console.error(err)
   }
 }
 
@@ -65,8 +63,8 @@ async function switchFunction(company, queries, browser) {
     }    
 }   
 
-async function sleep(mseconds) {
-  return new Promise(resolve => setTimeout(resolve, mseconds));
+async function sleep(milliseconds) {
+  return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 
 main();

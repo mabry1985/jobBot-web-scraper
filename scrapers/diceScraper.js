@@ -6,6 +6,7 @@ async function createDiceJobObjects(jobPage) {
   const html = await request.get(jobPage);
   const $ = cheerio.load(html);
   const title = $("#header-wrap > div.container > div .jobTitle").text();
+  
   const description = $("#jobdescSec")
     .text()
     .trim();
