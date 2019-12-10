@@ -2,7 +2,7 @@ const cheerio = require('cheerio');
 const jobBoard = require('../utility/jobBoard');
 const file = require('../utility/files');
 
-async function createGoogleJobObjects(html) {
+async function createGoogleJobObjects(html, search) {
   const $ = cheerio.load(html);
   const results = Promise.all(
     $("#gws-horizon-textlists__job_details_page")
@@ -11,7 +11,7 @@ async function createGoogleJobObjects(html) {
           .find("h2")
           .text();
 
-        if(jobBoard.jobFilterTitle(title)){
+        if(jobBoard.jobFilterTitle(title) || title === ""){
           return;
         }else{
           const description = $(el)
@@ -26,19 +26,21 @@ async function createGoogleJobObjects(html) {
             .toString();
           const timeStamp = new Date();
           const jobBoardSite = "Google Jobs"
-          jobBoard.save(title, description, postedBy, applyUrl, timeStamp, jobBoardSite)
+          const searchQuery = search
+          jobBoard.save(title, description, postedBy, applyUrl, timeStamp, searchQuery, jobBoardSite)
           return{ 
             title, 
             description, 
             postedBy, 
             applyUrl, 
-            jobBoardSite}
+            jobBoardSite,
+            searchQuery,
+            timeStamp
+          }
         }
       }).get()
     )
-    return results
-    //no need to return promise it's already resolved
-    // return Promise.resolve(results)
+    return Promise.resolve(results)
 }
 
 async function googleScrape(browser, queries) {
@@ -50,7 +52,7 @@ async function googleScrape(browser, queries) {
       const page = await browser.newPage();
       await page.goto(url, { waitUntil: "networkidle2" });
       const html = await page.evaluate(() => document.body.innerHTML);
-      const jobs = await createGoogleJobObjects(html)
+      const jobs = await createGoogleJobObjects(html, el.query)
       return jobs
     } catch (err) {
       console.error(err);
