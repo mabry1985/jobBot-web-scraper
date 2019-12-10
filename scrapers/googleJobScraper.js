@@ -27,7 +27,14 @@ async function createGoogleJobObjects(html, search) {
           const timeStamp = new Date();
           const jobBoardSite = "Google Jobs"
           const searchQuery = search
-          jobBoard.save(title, description, postedBy, applyUrl, timeStamp, searchQuery, jobBoardSite)
+          jobBoard.save(
+            title, 
+            description, 
+            postedBy, 
+            applyUrl,  
+            jobBoardSite, 
+            searchQuery, 
+            timeStamp,)
           return{ 
             title, 
             description, 
@@ -40,7 +47,7 @@ async function createGoogleJobObjects(html, search) {
         }
       }).get()
     )
-    return Promise.resolve(results)
+    return results
 }
 
 async function googleScrape(browser, queries) {
