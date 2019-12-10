@@ -1,6 +1,6 @@
 const JobBoard = require("../models/JobBoard");
 
-async function save(title, description, postedBy, applyUrl,timeStamp, jobBoardSite) {
+async function save(title, description, postedBy, applyUrl,timeStamp, searchQuery, jobBoardSite) {
   const jobFromDb = await JobBoard.findOne({ description });
   if (!jobFromDb) {
     const jobBoard = new JobBoard({
@@ -9,7 +9,8 @@ async function save(title, description, postedBy, applyUrl,timeStamp, jobBoardSi
       postedBy,
       applyUrl,
       jobBoardSite,
-      timeStamp
+      searchQuery,
+      timeStamp,
     });
     console.log("job saved");
     return jobBoard.save();
