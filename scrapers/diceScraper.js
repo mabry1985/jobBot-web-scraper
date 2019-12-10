@@ -3,29 +3,33 @@ const jobBoard = require("../utility/jobBoard");
 const request = require("request-promise");
 
 async function createDiceJobObjects(jobPage, search) {
-  const html = await request.get(jobPage);
-  const $ = cheerio.load(html);
-  const title = $("#header-wrap > div.container > div .jobTitle").text();
-  if (jobBoard.jobFilterTitle(title) || title === "") {
-    return;
-  } else {
-    const description = $("#jobdescSec")
-      .text()
-      .trim();
-    const postedBy = $("#hiringOrganizationName").text();
-    const applyUrl = $("#applybtn").attr("onclick");
-    const timeStamp = new Date();
-    const jobBoardSite = "Dice";
-    const searchQuery = search;
-    await jobBoard.save(
-      title,
-      description,
-      postedBy,
-      applyUrl,
-      jobBoardSite,
-      searchQuery,
-      timeStamp
-    );
+  try {
+    const html = await request.get(jobPage);
+    const $ = cheerio.load(html);
+    const title = $("#header-wrap > div.container > div .jobTitle").text();
+    if (jobBoard.jobFilterTitle(title) || title === "") {
+      return;
+    } else {
+      const description = $("#jobdescSec")
+        .text()
+        .trim();
+      const postedBy = $("#hiringOrganizationName").text();
+      const applyUrl = $('#appUrl').attr('value');
+      const timeStamp = new Date();
+      const jobBoardSite = "Dice";
+      const searchQuery = search;
+      await jobBoard.save(
+        title,
+        description,
+        postedBy,
+        applyUrl,
+        jobBoardSite,
+        searchQuery,
+        timeStamp
+      );
+    }
+  } catch (err) {
+    console.error(err)
   }
 }
 
