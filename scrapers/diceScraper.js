@@ -2,20 +2,30 @@ const cheerio = require("cheerio");
 const jobBoard = require("../utility/jobBoard");
 const request = require("request-promise");
 
-async function createDiceJobObjects(jobPage) {
+async function createDiceJobObjects(jobPage, search) {
   const html = await request.get(jobPage);
   const $ = cheerio.load(html);
   const title = $("#header-wrap > div.container > div .jobTitle").text();
-  
-  const description = $("#jobdescSec")
-    .text()
-    .trim();
-  const postedBy = $("#hiringOrganizationName").text();
-  const applyUrl = $("#applybtn").attr("onclick");
-  const jobBoardSite = "Dice";
-  const timeStamp = new Date();
-  await jobBoard.save(title, description, postedBy, applyUrl,  timeStamp, jobBoardSite);
-  return { title, description, postedBy, applyUrl, timeStamp, jobBoardSite
+  if (jobBoard.jobFilterTitle(title) || title === "") {
+    return;
+  } else {
+    const description = $("#jobdescSec")
+      .text()
+      .trim();
+    const postedBy = $("#hiringOrganizationName").text();
+    const applyUrl = $("#applybtn").attr("onclick");
+    const timeStamp = new Date();
+    const jobBoardSite = "Dice";
+    const searchQuery = search;
+    await jobBoard.save(
+      title,
+      description,
+      postedBy,
+      applyUrl,
+      jobBoardSite,
+      searchQuery,
+      timeStamp
+    );
   }
 }
 
@@ -38,7 +48,7 @@ async function diceScrape(browser, queries) {
       const jobLinks = await scrapeJobLinks(html)
       const jobsArray = jobLinks.map(jobPage => {
         return new Promise(async(resolve, reject) =>{
-          const job = await createDiceJobObjects(jobPage, browser)
+          const job = await createDiceJobObjects(jobPage, el.query)
           resolve(job);
         });
        })
