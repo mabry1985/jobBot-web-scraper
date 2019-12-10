@@ -34,7 +34,10 @@ async function connectToMongoDb() {
       const resultsArray = await siteLoop(queries, browser)
       let results = await Promise.all(resultsArray);
       results = [].concat.apply([], results);
-      file.createCsvFile(results);
+      const filtered = results.filter(function (el) {
+        return el != null;
+      });
+      file.createCsvFile(filtered);
   } catch(err) {
     console.error(err)
   }
