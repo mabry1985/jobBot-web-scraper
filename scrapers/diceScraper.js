@@ -27,6 +27,15 @@ async function createDiceJobObjects(jobPage, search) {
         searchQuery,
         timeStamp
       );
+      return{
+        title,
+        description,
+        postedBy,
+        applyUrl,
+        jobBoardSite,
+        searchQuery,
+        timeStamp
+      }
     }
   } catch (err) {
     console.error(err)
@@ -43,8 +52,8 @@ async function scrapeJobLinks(html) {
 
 async function diceScrape(browser, queries) {
  const resultsArray = queries.map(async el => {
-    let search = el.query.replace(" ", "%20");
-    let url = `https://www.dice.com/jobs?q=${search}&location=Portland,%20OR,%20USA&latitude=45.5051064&longitude=-122.67502609999997&countryCode=US&locationPrecision=City&radius=30&radiusUnit=mi&page=1&pageSize=20&facets=employmentType%7CpostedDate%7CworkFromHomeAvailability%7CemployerType%7CeasyApply&filters.postedDate=ONE&language=en`;
+    const search = el.query.replace(" ", "%20");
+    const url = `https://www.dice.com/jobs?q=${search}&location=Portland,%20OR,%20USA&latitude=45.5051064&longitude=-122.67502609999997&countryCode=US&locationPrecision=City&radius=30&radiusUnit=mi&page=1&pageSize=20&facets=employmentType%7CpostedDate%7CworkFromHomeAvailability%7CemployerType%7CeasyApply&filters.postedDate=ONE&language=en`;
     try {
       const page = await browser.newPage();
       await page.goto(url, { waitUntil: "networkidle2", timeout: 0 });

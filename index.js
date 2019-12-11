@@ -3,19 +3,15 @@ const mongoose = require("mongoose");
 const SearchQuery = require("./models/SearchQuery");
 const google = require("./scrapers/googleJobScraper");
 const dice = require('./scrapers/diceScraper');
+const sf = require('./scrapers/siliconFloristScraper');
 const file = require('./utility/files');
 
 require("dotenv").config();
 
 let siteList = [
-  {
-    company: "Google Jobs",
-    url: "job board"
-  },
-  {
-    company: "Dice",
-    url: "job board"
-  }
+  "Google Jobs", 
+  "Dice", 
+  "Silicon Florist"
 ]
 
 async function connectToMongoDb() {
@@ -46,8 +42,7 @@ async function connectToMongoDb() {
 async function siteLoop(queries, browser) {
   let resultsArray = [];
   for (let i = 0; i < siteList.length; i++) {
-    const results = await switchFunction(siteList[i].company, queries, browser)
-    await sleep(5000);
+    const results = await switchFunction(siteList[i], queries, browser)
     resultsArray.push(results);
   }
   return resultsArray
@@ -61,13 +56,16 @@ async function switchFunction(company, queries, browser) {
     case "Dice":
       results = await dice.diceScrape(browser, queries);
       return results;
+    case "Silicon Florist":
+      results = await sf.siliconFloristScrape(browser)
+      return results;
     default:
       return
     }    
 }   
 
-async function sleep(milliseconds) {
-  return new Promise(resolve => setTimeout(resolve, milliseconds));
-}
+// async function sleep(milliseconds) {
+//   return new Promise(resolve => setTimeout(resolve, milliseconds));
+// }
 
 main();
