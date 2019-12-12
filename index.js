@@ -28,7 +28,7 @@ async function connectToMongoDb() {
       await connectToMongoDb();
       const queries = await SearchQuery.find();
       const browser = await puppeteer.launch({ 
-        headless: true, 
+        headless: false, 
         'args': [
           '--no-sandbox',
           '--disable-setuid-sandbox'

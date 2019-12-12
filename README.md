@@ -5,7 +5,7 @@ jobBot is a webscraper, or rather a series of webscrapers, that I built to pull 
 Still a work in progress.
 
 ## To-do
-[ ] Deploy to Heroku 
+[/] Deploy to Heroku 
 
 [ ] Don't break Heroku with all the get requests 😬
 
