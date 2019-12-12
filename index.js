@@ -27,7 +27,12 @@ async function connectToMongoDb() {
     try {
       await connectToMongoDb();
       const queries = await SearchQuery.find();
-      const browser = await puppeteer.launch({ headless: false });
+      const browser = await puppeteer.launch({ 
+        headless: false, 
+        'args': [
+          '--no-sandbox',
+          '--disable-setuid-sandbox'
+        ]});
       const resultsArray = await siteLoop(queries, browser)
       let results = await Promise.all(resultsArray);
       results = [].concat.apply([], results);
