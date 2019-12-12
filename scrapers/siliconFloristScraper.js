@@ -1,5 +1,6 @@
 const cheerio = require("cheerio");
 const jobBoard = require("../utility/jobBoard");
+const sleep = require('../utility/sleep');
 
 async function createSiliconFloristObjects(jobPage, browser) {
   try {
@@ -8,7 +9,7 @@ async function createSiliconFloristObjects(jobPage, browser) {
     const html = await page.evaluate(() => document.body.innerHTML);
     const $ = cheerio.load(html);
     const title = $("div.jobDetail-header > div > h1").text()
-    if (jobBoard.jobFilterTitle(title) || title === "") {
+    if (title === "") {
       return;
     } else {
       const description = $("div.job-body > p").text()
@@ -17,16 +18,7 @@ async function createSiliconFloristObjects(jobPage, browser) {
       const timeStamp = new Date();
       const jobBoardSite = "Silicon-Florist";
       const searchQuery = "N/A";
-      await jobBoard.save(
-        title,
-        description,
-        postedBy,
-        applyUrl,
-        jobBoardSite,
-        searchQuery,
-        timeStamp
-      );
-      return {
+      const job = {
         title,
         description,
         postedBy,
@@ -35,6 +27,9 @@ async function createSiliconFloristObjects(jobPage, browser) {
         searchQuery,
         timeStamp
       }
+      await jobBoard.save(job);
+      sleep.sleep(1000);
+      return job;
     }
   } catch (err) {
     console.error(err)
@@ -60,6 +55,7 @@ async function siliconFloristScrape(browser) {
     return new Promise(async (resolve) => {
       const job = await createSiliconFloristObjects(jobPage, browser); 
       resolve(job);
+      sleep.sleep(1000);
     });
   })
   const jobs = await Promise.all(jobsArray)

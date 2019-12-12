@@ -1,6 +1,6 @@
 const cheerio = require('cheerio');
 const jobBoard = require('../utility/jobBoard');
-const file = require('../utility/files');
+const sleep = require('../utility/sleep');
 
 async function createGoogleJobObjects(html, search) {
   const $ = cheerio.load(html);
@@ -10,8 +10,7 @@ async function createGoogleJobObjects(html, search) {
         const title = $(el)
           .find("h2")
           .text();
-
-        if(jobBoard.jobFilterTitle(title) || title === ""){
+        if(title === ""){
           return;
         }else{
           const description = $(el)
@@ -27,23 +26,18 @@ async function createGoogleJobObjects(html, search) {
           const timeStamp = new Date();
           const jobBoardSite = "Google Jobs"
           const searchQuery = search
-          jobBoard.save(
+          const job = {
             title, 
             description, 
             postedBy, 
             applyUrl,  
             jobBoardSite, 
             searchQuery, 
-            timeStamp,)
-          return{ 
-            title, 
-            description, 
-            postedBy, 
-            applyUrl, 
-            jobBoardSite,
-            searchQuery,
             timeStamp
           }
+          jobBoard.save(job)
+          sleep.sleep(1000)
+          return job
         }
       }).get()
     )
@@ -60,6 +54,7 @@ async function googleScrape(browser, queries) {
       await page.goto(url, { waitUntil: "networkidle2" });
       const html = await page.evaluate(() => document.body.innerHTML);
       const jobs = await createGoogleJobObjects(html, el.query)
+      sleep.sleep(1000)
       return jobs
     } catch (err) {
       console.error(err);
