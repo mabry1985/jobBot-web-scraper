@@ -1,7 +1,12 @@
 const JobBoard = require("../models/JobBoard");
 
-async function save(title, description, postedBy, applyUrl, jobBoardSite, searchQuery, timeStamp) {
-  const jobFromDb = await JobBoard.findOne({ description });
+async function save(jObject) {
+  const { title, description, postedBy, applyUrl, jobBoardSite, searchQuery, timeStamp} = jObject;
+  let isSenior = false; 
+  if (jobFilterTitle(title)){
+    isSenior = true;
+  }
+  const jobFromDb = await JobBoard.findOne({description});
   if (!jobFromDb) {
     const jobBoard = new JobBoard({
       title,
@@ -10,7 +15,8 @@ async function save(title, description, postedBy, applyUrl, jobBoardSite, search
       applyUrl,
       jobBoardSite,
       searchQuery,
-      timeStamp,
+      isSenior,
+      timeStamp
     });
     console.log("job saved");
     return jobBoard.save();

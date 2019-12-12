@@ -9,7 +9,8 @@ const JobBoard = mongoose.model(
     applyUrl: String,
     jobBoardSite: String,
     searchQuery: String,
-    timeStamp: Date
+    timeStamp: Date,
+    isSenior: Boolean
   })
 );
 
