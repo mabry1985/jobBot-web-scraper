@@ -5,10 +5,16 @@ jobBot is a webscraper, or rather a series of webscrapers, that I built to pull 
 Still a work in progress.
 
 ## To-do
+[ ] Deploy to Heroku 
+
+[ ] Don't break Heroku with all the get requests 😬
 
 [ ] Add more test coverage
+
 [ ] Add logic to watch individual company career pages
+
 [ ] Add more job boards
+
 [ ] Expand README
 
 ## Technologies/Libraries/Packages used
