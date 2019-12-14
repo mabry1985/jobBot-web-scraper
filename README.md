@@ -5,9 +5,6 @@ jobBot is a webscraper, or rather a series of webscrapers, that I built to pull 
 Still a work in progress.
 
 ## To-do
-[/] Deploy to Heroku 
-
-[ ] Don't break Heroku with all the get requests 😬
 
 [ ] Add more test coverage
 
@@ -18,7 +15,7 @@ Still a work in progress.
 [ ] Expand README
 
 ## Technologies/Libraries/Packages used
-Node, Request, Puppeteer, Mongoose, Objects-to-CSV
+Node, Request, Puppeteer, Mongoose, MongoDB Atlas
 
 ## Installation
 
