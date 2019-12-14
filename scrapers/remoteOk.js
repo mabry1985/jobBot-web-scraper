@@ -20,19 +20,19 @@ async function remoteOkScrape() {
     const $ = cheerio.load(html);
     const results = Promise.all(
       $("tr.job").map(async (i, el) => {
-        const title = $(el).find("[itemprop='title']").text();
-        
-        if(title === ""){
+        const title = $(el).
+          find("[itemprop='title']")
+          .text();
+        let applyUrl = $(el)
+          .find("td.source > a")
+          .attr("href")
+        if(title === "" || applyUrl === alert ){
           return
         }else {
           const description = await scrapeDescription($, i);
           const postedBy = $(el).find("h3[itemprop='name']").text();
-          let applyUrl = $(el).find("td.source > a").attr("href")
-          if(applyUrl === alert ) {
-            applyUrl = "N/A: Old Job"
-          } else {
-            applyUrl = "https://www.remoteok.io" + applyUrl;
-          }
+          applyUrl = "https://www.remoteok.io" + applyUrl;
+  
           const jobBoardSite = "Remote OK";
           const searchQuery = "N/A";
           const timeStamp = new Date();

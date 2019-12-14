@@ -2,6 +2,7 @@ const puppeteer = require("puppeteer");
 const mongoose = require("mongoose");
 const SearchQuery = require("./models/SearchQuery");
 const google = require("./scrapers/googleJobScraper");
+const craigslist = require("./scrapers/craigslistScraper");
 const dice = require('./scrapers/diceScraper');
 const siliconFlorist = require('./scrapers/siliconFloristScraper');
 const remoteOk = require('./scrapers/remoteOk');
@@ -12,7 +13,8 @@ let siteList = [
   "Google Jobs", 
   "Dice", 
   "Silicon Florist",
-  "Remote OK"
+  "Remote OK",
+  "Craigslist",
 ]
 
 async function connectToMongoDb() {
@@ -27,7 +29,12 @@ async function connectToMongoDb() {
     try {
       await connectToMongoDb();
       const queries = await SearchQuery.find();
-      const browser = await puppeteer.launch({ headless: false });
+      const browser = await puppeteer.launch({
+        headless: true,
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox'
+        ]});
       const resultsArray = await siteLoop(queries, browser)
       let results = await Promise.all(resultsArray);
       results = [].concat.apply([], results);
@@ -63,6 +70,9 @@ async function switchFunction(company, queries, browser) {
       return results;
     case "Remote OK":
       results = await remoteOk.remoteOkScrape();
+      return results;
+    case "Craigslist":
+      results = await craigslist.craigslistScraper();
       return results;
     default:
       return
