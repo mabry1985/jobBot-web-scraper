@@ -15,7 +15,7 @@ async function createSiliconFloristObjects(jobPage, browser) {
       const description = $("div.job-body > p").text()
       const postedBy = $("div.text-primary.text-large > strong > a").text();
       const applyUrl = jobPage;
-      const timeStamp = new Date();
+      const timeStamp = new Date().toLocaleDateString();
       const jobBoardSite = "Silicon-Florist";
       const searchQuery = "N/A";
       const job = {

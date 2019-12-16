@@ -18,7 +18,7 @@ async function createDiceJobObjects(jobPage, search) {
       const applyUrl = $('#appUrl').attr('value');
       const jobBoardSite = "Dice";
       const searchQuery = search;
-      const timeStamp = new Date();
+      const timeStamp = new Date().toLocaleDateString();
       const job = {
         title,
         description,

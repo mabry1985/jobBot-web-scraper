@@ -23,7 +23,7 @@ async function createGoogleJobObjects(html, search) {
             .find(" span > a")
             .attr("href")
             .toString();
-          const timeStamp = new Date();
+          const timeStamp = new Date().toLocaleDateString();
           const jobBoardSite = "Google Jobs"
           const searchQuery = search
           const job = {

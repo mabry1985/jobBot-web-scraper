@@ -29,7 +29,7 @@ async function scrapeResults(pages){
           const applyUrl = pages[i];
           const jobBoardSite = "Craigslist";
           const searchQuery = "N/A";
-          const timeStamp = new Date();
+          const timeStamp = new Date().toLocaleDateString();
           const job = {
             title,
             description,

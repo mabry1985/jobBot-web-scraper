@@ -35,7 +35,7 @@ async function remoteOkScrape() {
   
           const jobBoardSite = "Remote OK";
           const searchQuery = "N/A";
-          const timeStamp = new Date();
+          const timeStamp = new Date().toLocaleDateString();
           const job = {
             title,
             description,
