@@ -18,7 +18,7 @@ let siteList = [
 ]
 
 async function connectToMongoDb() {
-  mongooseConnection = process.env.MONGO_CONNECTION
+  const mongooseConnection = process.env.MONGO_CONNECTION
   await mongoose.connect(
     mongooseConnection, 
     { useNewUrlParser: true}
