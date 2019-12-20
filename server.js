@@ -19,8 +19,10 @@ connection.once("open", () => {
 });
 
 const searchRouter = require("./routes/search");
+const jobRouter = require("./routes/jobs");
 
 app.use("/search", searchRouter);
+app.use("/jobs", jobRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
