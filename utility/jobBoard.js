@@ -3,8 +3,12 @@ const JobBoard = require("../models/JobBoard");
 async function save(jObject) {
   const { title, description, postedBy, applyUrl, jobBoardSite, searchQuery, timeStamp} = jObject;
   let isSenior = false; 
-  if (jobFilterTitle(title)){
+  let isJunior = false;
+  if (jobFilterSeniorTitle(title)){
     isSenior = true;
+  }
+  if (jobFilterSeniorTitle(title)) {
+    isJunior = true;
   }
   const jobFromDb = await JobBoard.findOne({description});
   if (!jobFromDb) {
@@ -16,6 +20,7 @@ async function save(jObject) {
       jobBoardSite,
       searchQuery,
       isSenior,
+      isJunior,
       timeStamp
     });
     console.log("job saved");
@@ -25,12 +30,21 @@ async function save(jObject) {
   }
 }
 
-function jobFilterTitle(title){
+function jobFilterSeniorTitle(title){
   title = title.toLowerCase()
   if (title.includes("senior") || title.includes("sr")) {
     return true
   } else {
     return false
+  }
+}
+
+function jobFilterJuniorTitle(title) {
+  title = title.toLowerCase();
+  if (title.includes("junior") || title.includes("jr")) {
+    return true;
+  } else {
+    return false;
   }
 }
 

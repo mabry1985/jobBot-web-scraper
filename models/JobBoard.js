@@ -10,7 +10,8 @@ const JobBoard = mongoose.model(
     jobBoardSite: String,
     searchQuery: String,
     timeStamp: Date,
-    isSenior: Boolean
+    isSenior: Boolean,
+    isJunior: Boolean
   })
 );
 
