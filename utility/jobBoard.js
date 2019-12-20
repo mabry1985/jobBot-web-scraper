@@ -7,7 +7,7 @@ async function save(jObject) {
   if (jobFilterSeniorTitle(title)){
     isSenior = true;
   }
-  if (jobFilterSeniorTitle(title)) {
+  if (jobFilterJuniorTitle(title)) {
     isJunior = true;
   }
   const jobFromDb = await JobBoard.findOne({description});
@@ -49,6 +49,5 @@ function jobFilterJuniorTitle(title) {
 }
 
 module.exports = {
-  save,
-  jobFilterTitle
+  save
 };
