@@ -29,7 +29,7 @@ async function createDiceJobObjects(jobPage, search) {
         timeStamp
       }
       await jobBoard.save(job);
-      sleep.sleep(2000)
+      await sleep.sleep(2000)
       return job
     }
   } catch (err) {
