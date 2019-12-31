@@ -48,7 +48,6 @@ async function scrapeJobLinks(html) {
 async function siliconFloristScrape() {
   try {
     const browser = await puppeteer.launch({
-      executablePath: '/usr/bin/chromium-browser',
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"]
     });

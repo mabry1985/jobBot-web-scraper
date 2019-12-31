@@ -46,26 +46,25 @@ async function createGoogleJobObjects(html, search) {
 }
 
 async function googleScrape(queries) {
-  try {
-    const browser = await puppeteer.launch({
-      executablePath: '/usr/bin/chromium-browser',
-      headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"]
-    });
-    const resultsArray = queries.map(async el => {
-      const search = el.query.replace(" ", "+");
-      const url = `https://www.google.com/search?rlz=1C5CHFA_enUS860US860&sxsrf=ACYBGNQFBvGV7oqKx8JbHS7Bl7RZYx-n_A:1575752693783&ei=9RPsXamkL8ba-gTL1IXYDw&q=${search}&gs_l=psy-ab.3..0l2j0i131j0l7.70925.72801..73402...2.2..1.103.563.6j1......0....1..gws-wiz.......0i71j0i67j0i10i67j0i10j0i13.qs7MRgeogIE&uact=5&ibp=htl;jobs&sa=X&ved=2ahUKEwjk3pfAuKTmAhXCtp4KHbSuB5AQiYsCKAB6BAgKEAM#htivrt=jobs&fpstate=tldetail&htichips=date_posted:today&htischips=date_posted;today&htilrad=48.2802&htidocid=sFqvZk2-c-3VV-g5AAAAAA%3D%3D`;
-      
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"]
+  });
+  const resultsArray = queries.map(async el => {
+    const search = el.query.replace(" ", "+");
+    const url = `https://www.google.com/search?rlz=1C5CHFA_enUS860US860&sxsrf=ACYBGNQFBvGV7oqKx8JbHS7Bl7RZYx-n_A:1575752693783&ei=9RPsXamkL8ba-gTL1IXYDw&q=${search}&gs_l=psy-ab.3..0l2j0i131j0l7.70925.72801..73402...2.2..1.103.563.6j1......0....1..gws-wiz.......0i71j0i67j0i10i67j0i10j0i13.qs7MRgeogIE&uact=5&ibp=htl;jobs&sa=X&ved=2ahUKEwjk3pfAuKTmAhXCtp4KHbSuB5AQiYsCKAB6BAgKEAM#htivrt=jobs&fpstate=tldetail&htichips=date_posted:today&htischips=date_posted;today&htilrad=48.2802&htidocid=sFqvZk2-c-3VV-g5AAAAAA%3D%3D`;
+    
+    try {
       const page = await browser.newPage();
       await page.goto(url, { waitUntil: "networkidle2" });
       const html = await page.evaluate(() => document.body.innerHTML);
       const jobs = await createGoogleJobObjects(html, el.query)
       await sleep.sleep(1000)
       return jobs
-    });
     } catch (err) {
       console.error(err);
     }
+  });
   let results = await Promise.all(resultsArray);
   results = [].concat.apply([], results);
   await browser.close()
