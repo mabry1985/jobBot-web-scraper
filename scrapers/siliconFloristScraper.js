@@ -1,6 +1,7 @@
 const cheerio = require("cheerio");
 const jobBoard = require("../utility/jobBoard");
 const sleep = require('../utility/sleep');
+const puppeteer = require("puppeteer");
 
 async function createSiliconFloristObjects(jobPage, browser) {
   try {
@@ -28,7 +29,7 @@ async function createSiliconFloristObjects(jobPage, browser) {
         timeStamp
       }
       await jobBoard.save(job);
-      sleep.sleep(1000);
+      await sleep.sleep(1000);
       return job;
     }
   } catch (err) {
@@ -44,21 +45,26 @@ async function scrapeJobLinks(html) {
   return results
 }
 
-async function siliconFloristScrape(browser) {
+async function siliconFloristScrape() {
   try {
+    const browser = await puppeteer.launch({
+      headless: false,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"]
+    });
     const url = "https://jobs.siliconflorist.com";
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: "networkidle2" });
     const html = await page.evaluate(() => document.body.innerHTML);
     const jobLinks = await scrapeJobLinks(html)
     const jobsArray = jobLinks.map(jobPage => {
-    return new Promise(async (resolve) => {
-      const job = await createSiliconFloristObjects(jobPage, browser); 
-      resolve(job);
-      sleep.sleep(1000);
+      return new Promise(async (resolve) => {
+        const job = await createSiliconFloristObjects(jobPage, browser); 
+        resolve(job);
+        await sleep.sleep(1000);
     });
   })
-  const jobs = await Promise.all(jobsArray)
+  const jobs = await Promise.all(jobsArray);
+  await browser.close();
   return jobs
   } catch (err) {
     console.error(err);

@@ -1,9 +1,7 @@
-const puppeteer = require("puppeteer");
 const mongoose = require("mongoose");
 const SearchQuery = require("./models/SearchQuery");
 const google = require("./scrapers/googleJobScraper");
 const craigslist = require("./scrapers/craigslistScraper");
-const dice = require('./scrapers/diceScraper');
 const siliconFlorist = require('./scrapers/siliconFloristScraper');
 const remoteOk = require('./scrapers/remoteOk');
 const file = require('./utility/files');
@@ -11,7 +9,6 @@ require("dotenv").config();
 
 let siteList = [
   "Google Jobs", 
-  "Dice", 
   "Silicon Florist",
   "Remote OK",
   "Craigslist",
@@ -29,13 +26,7 @@ async function connectToMongoDb() {
     try {
       await connectToMongoDb();
       const queries = await SearchQuery.find();
-      const browser = await puppeteer.launch({
-        headless: false,
-        args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox'
-        ]});
-      const resultsArray = await siteLoop(queries, browser)
+      const resultsArray = await siteLoop(queries)
       let results = await Promise.all(resultsArray);
       results = [].concat.apply([], results);
       const filtered = results.filter(function (el) {
@@ -47,26 +38,23 @@ async function connectToMongoDb() {
   }
 }
 
-async function siteLoop(queries, browser) {
+async function siteLoop(queries) {
   let resultsArray = [];
   for (let i = 0; i < siteList.length; i++) {
-    const results = await switchFunction(siteList[i], queries, browser)
+    const results = await switchFunction(siteList[i], queries)
     resultsArray.push(results);
   }
   return resultsArray
 }
 
-async function switchFunction(company, queries, browser) {
+async function switchFunction(company, queries) {
   let results;
   switch(company){ 
     case "Google Jobs":
-      results = await google.googleScrape(browser, queries)
+      results = await google.googleScrape(queries)
       return results
-    case "Dice":
-      results = await dice.diceScrape(browser, queries);
-      return results;
     case "Silicon Florist":
-      results = await siliconFlorist.siliconFloristScrape(browser)
+      results = await siliconFlorist.siliconFloristScrape()
       return results;
     case "Remote OK":
       results = await remoteOk.remoteOkScrape();
