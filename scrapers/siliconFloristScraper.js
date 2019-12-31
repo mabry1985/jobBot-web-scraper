@@ -57,7 +57,7 @@ async function siliconFloristScrape() {
     await page.goto(url, { waitUntil: "networkidle2" });
     const html = await page.evaluate(() => document.body.innerHTML);
     const jobLinks = await scrapeJobLinks(html)
-    const jobsArray = jobLinks.map(jobPage => {
+    const jobsArray = jobLinks.map(async (jobPage) => {
       return new Promise(async (resolve) => {
         const job = await createSiliconFloristObjects(jobPage, browser); 
         resolve(job);
