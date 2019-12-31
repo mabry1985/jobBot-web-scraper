@@ -47,7 +47,8 @@ async function createGoogleJobObjects(html, search) {
 
 async function googleScrape(queries) {
   const browser = await puppeteer.launch({
-    headless: false,
+    executablePath: '/usr/bin/chromium-browser',
+    headless: true,
     args: ["--no-sandbox", "--disable-setuid-sandbox"]
   });
   const resultsArray = queries.map(async el => {
