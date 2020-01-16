@@ -9,10 +9,11 @@ const JobBoard = mongoose.model(
     applyUrl: String,
     jobBoardSite: String,
     searchQuery: String,
-    timeStamp: Date,
     isSenior: Boolean,
     isJunior: Boolean
-  })
+  },
+    {timestamps: true }
+  )
 );
 
 module.exports = JobBoard;
