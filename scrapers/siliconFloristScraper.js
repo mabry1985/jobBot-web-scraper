@@ -16,7 +16,6 @@ async function createSiliconFloristObjects(jobPage, browser) {
       const description = $("div.job-body > p").text()
       const postedBy = $("div.text-primary.text-large > strong > a").text();
       const applyUrl = jobPage;
-      const timeStamp = new Date().toLocaleDateString();
       const jobBoardSite = "Silicon-Florist";
       const searchQuery = "N/A";
       const job = {
@@ -26,7 +25,6 @@ async function createSiliconFloristObjects(jobPage, browser) {
         applyUrl,
         jobBoardSite,
         searchQuery,
-        timeStamp
       }
       await jobBoard.save(job);
       await sleep.sleep(1000);
@@ -48,8 +46,9 @@ async function scrapeJobLinks(html) {
 async function siliconFloristScrape() {
   try {
     const browser = await puppeteer.launch({
-      headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"]
+      headless: false,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      timeout: 0
     });
     const url = "https://jobs.siliconflorist.com";
     const page = await browser.newPage();
@@ -65,6 +64,7 @@ async function siliconFloristScrape() {
   })
   const jobs = await Promise.all(jobsArray);
   await browser.close();
+  console.log("In silicon florist")
   return jobs
   } catch (err) {
     console.error(err);

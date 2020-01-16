@@ -29,7 +29,6 @@ async function scrapeResults(pages){
           const applyUrl = pages[i];
           const jobBoardSite = "Craigslist";
           const searchQuery = "N/A";
-          const timeStamp = new Date().toLocaleDateString();
           const job = {
             title,
             description,
@@ -37,7 +36,6 @@ async function scrapeResults(pages){
             applyUrl,
             jobBoardSite,
             searchQuery, 
-            timeStamp
           }
           jobBoard.save(job)
           s.sleep(1000)
@@ -46,7 +44,7 @@ async function scrapeResults(pages){
           return
         }
       })
-      )
+    )
     return results
     } catch (err) {
     console.error(err);

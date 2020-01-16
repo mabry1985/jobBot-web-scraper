@@ -35,7 +35,6 @@ async function remoteOkScrape() {
   
           const jobBoardSite = "Remote OK";
           const searchQuery = "N/A";
-          const timeStamp = new Date().toLocaleDateString();
           const job = {
             title,
             description,
@@ -43,14 +42,14 @@ async function remoteOkScrape() {
             applyUrl,
             jobBoardSite,
             searchQuery,
-            timeStamp
           }
           await jobBoard.save(job);
           sleep.sleep(2000)
           return job
         }
       }).get() 
-      )
+    )
+    console.log("In Remote OK")
     return results
   } catch(err) {
     console.error(err)

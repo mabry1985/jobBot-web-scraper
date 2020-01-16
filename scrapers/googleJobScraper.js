@@ -24,7 +24,6 @@ async function createGoogleJobObjects(html, search) {
             .find(" span > a")
             .attr("href")
             .toString();
-          const timeStamp = new Date().toLocaleDateString();
           const jobBoardSite = "Google Jobs"
           const searchQuery = search
           const job = {
@@ -33,8 +32,7 @@ async function createGoogleJobObjects(html, search) {
             postedBy, 
             applyUrl,  
             jobBoardSite, 
-            searchQuery, 
-            timeStamp
+            searchQuery,
           }
           jobBoard.save(job)
           await sleep.sleep(1000)
@@ -47,8 +45,9 @@ async function createGoogleJobObjects(html, search) {
 
 async function googleScrape(queries) {
   const browser = await puppeteer.launch({
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"]
+    headless: false,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    timeout: 0
   });
   const resultsArray = queries.map(async el => {
     const search = el.query.replace(" ", "+");
@@ -68,6 +67,7 @@ async function googleScrape(queries) {
   let results = await Promise.all(resultsArray);
   results = [].concat.apply([], results);
   await browser.close()
+  console.log("In Google Scraper")
   return results;
 }
 
