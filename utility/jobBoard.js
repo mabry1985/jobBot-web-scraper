@@ -1,7 +1,7 @@
 const JobBoard = require("../models/JobBoard");
 
 async function save(jObject) {
-  const { title, description, postedBy, applyUrl, jobBoardSite, searchQuery, timeStamp} = jObject;
+  const { title, description, postedBy, applyUrl, jobBoardSite, searchQuery } = jObject;
   let isSenior = false; 
   let isJunior = false;
   if (jobFilterSeniorTitle(title)){
@@ -21,7 +21,6 @@ async function save(jObject) {
       searchQuery,
       isSenior,
       isJunior,
-      timeStamp
     });
     console.log("job saved");
     return jobBoard.save();
