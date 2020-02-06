@@ -1,18 +1,6 @@
 # jobBot
 
-jobBot is a webscraper, or rather a series of webscrapers, that I built to pull data from a number of job boards. My goal was to find a job first and foremost, but I thought it also would be fun to start collecting data about the job market for developers in the Portland Metro area. This data will be used to help build a personal dashboard. 
-
-Still a work in progress.
-
-## To-do
-
-[ ] Add more test coverage
-
-[ ] Add logic to watch individual company career pages
-
-[ ] Add more job boards
-
-[ ] Expand README
+jobBot is a webscraper, or rather a series of webscrapers, that I built to pull data from a number of job boards. My goal was to find a job first and foremost, but I thought it also would be fun to start collecting data about the job market for developers in the Portland Metro area This data will be used to help build a personal dashboard. 
 
 ## Technologies/Libraries/Packages used
 Node, Request, Puppeteer, Mongoose, MongoDB Atlas
@@ -44,6 +32,10 @@ From root folder
 ```bash
 $ node index.js
 ```
+
+## Known Issues
+
+The scrapers that use puppeteer don't work in headless mode, I've tried multiple solutions I've found in forums but nothing works yet. I have feeling that it has something to do with the sheer amount of requests that jobbot is sending at a time. 
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
