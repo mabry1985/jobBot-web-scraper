@@ -44,7 +44,7 @@ async function remoteOkScrape() {
             searchQuery,
           }
           await jobBoard.save(job);
-          sleep.sleep(2000)
+          sleep.sleep(3000)
           return job
         }
       }).get() 

@@ -51,10 +51,10 @@ async function switchFunction(company, queries) {
   let results;
   switch(company){ 
     case "Google Jobs":
-      results = await google.googleScrape(queries)
-      return results
+      results = await google.googleScrape(queries);
+      return results;
     case "Silicon Florist":
-      results = await siliconFlorist.siliconFloristScrape()
+      results = await siliconFlorist.siliconFloristScrape();
       return results;
     case "Remote OK":
       results = await remoteOk.remoteOkScrape();

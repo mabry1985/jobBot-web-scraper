@@ -46,8 +46,8 @@ async function createGoogleJobObjects(html, search) {
 async function googleScrape(queries) {
   const browser = await puppeteer.launch({
     headless: false,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    timeout: 0
+    args: ["--no-sandbox"],
+    timeout: 10000,
   });
   const resultsArray = queries.map(async el => {
     const search = el.query.replace(" ", "+");
@@ -58,7 +58,7 @@ async function googleScrape(queries) {
       await page.goto(url, { waitUntil: "networkidle2" });
       const html = await page.evaluate(() => document.body.innerHTML);
       const jobs = await createGoogleJobObjects(html, el.query)
-      await sleep.sleep(1000)
+      await sleep.sleep(3000)
       return jobs
     } catch (err) {
       console.error(err);

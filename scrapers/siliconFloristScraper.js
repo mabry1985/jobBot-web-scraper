@@ -47,8 +47,8 @@ async function siliconFloristScrape() {
   try {
     const browser = await puppeteer.launch({
       headless: false,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      timeout: 0
+      args: ["--no-sandbox"],
+      timeout: 10000,
     });
     const url = "https://jobs.siliconflorist.com";
     const page = await browser.newPage();
