@@ -1,6 +1,6 @@
 # jobBot
 
-jobBot is a webscraper, or rather a series of webscrapers, that I built to pull data from a number of job boards. My goal was to find a job first and foremost, but I thought it also would be fun to start collecting data about the job market for developers in the Portland Metro area This data will be used to help build a personal dashboard. 
+jobBot is a webscraper, or rather a series of webscrapers, that I built to pull data from a number of job boards. My goal was to find a job first and foremost, but I thought it also would be fun to start collecting data about the job market for developers in the Portland Metro area. This data is used to populate a personal [dashboard](https://github.com/mabry1985/jobBot-dashboard). 
 
 ## Technologies/Libraries/Packages used
 Node, Request, Puppeteer, Mongoose, MongoDB Atlas
